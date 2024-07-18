@@ -1,0 +1,36 @@
+## Python
+*.log
+*.pot
+*.pyc
+*.ipynb
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# egg
+*.egg-info/
+.installed.cfg
+*.egg
+
+# dotenv
+.env
+.env.*
+
+# Tests
+tests/temp/*
+
+# virtualenv
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+.venv/
+
+# Ignore specific file types in sequenceviewer/upload
+SequenceViewer/uploads/*.fasta
+SequenceViewer/uploads/*.fastq
+SequenceViewer/uploads/*.gb
+
+# mac
+.DS_Store

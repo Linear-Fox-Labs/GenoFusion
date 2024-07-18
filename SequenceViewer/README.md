@@ -1,0 +1,1 @@
+# View FASTA, FASTQ, and GenBank files. (temporarily)

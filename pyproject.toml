@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "genofusion"
+description = "A tool for bioinformatics analysis of gene fusion events."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+    {name = "Nathan Fargo", email = "ntfargo@proton.me"},
+]
+keywords = [
+    "bioinformatics",
+    "genomics",
+    "gene-fusion",
+    "transcriptomics",
+    "rna-seq",
+    "fusion",
+    "deep-learning",
+    "analysis",
+    "CRISPR",
+    "python"
+]
+
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: Unix",
+    "Operating System :: POSIX",
+    "Operating System :: MacOS :: MacOS X",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries :: Backend",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
+
+dependencies = [
+    'pandas',
+    'regex',
+    'biopython',
+    'pygad',
+    'numpy',
+    'scipy',
+    'scikit-learn',
+    'viennarna',
+    'tensorflow < 2.16.1 ; platform_system != "Darwin"',
+    'tensorflow-macos <= 2.16.1 ; platform_system == "Darwin"',
+    'protobuf <= 5.27.0',
+    'silence_tensorflow',
+    'flask',
+]
+
+dynamic = ["version"]

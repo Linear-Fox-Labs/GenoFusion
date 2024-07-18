@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Sequences - {{ filename }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='genview.css') }}">
+    <script src="https://unpkg.com/seqviz"></script>
+    <style>
+        .enzyme {
+            color: black;
+            border: 1px solid red;
+            padding: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Viewing Sequences from {{ filename }}</h1>
+        <a href="{{ url_for('index') }}">View Another File</a>
+        <hr>
+        {% for record in sequences %}
+        <div class="sequence-container">
+            <div style="overflow: hidden;" id="seqviz-{{ record.id }}"></div>
+            <script>
+                window.seqviz.Viewer("seqviz-{{ record.id }}", {
+                    name: "{{ record.id }}",
+                    seq: "{{ record.sequence|safe }}",
+                    style: { height: "65vh", width: "65vw", color: "white" },
+                    bpColors: { A: "white", T: "white", G: "white", C: "white" },
+                    highlights: [
+                        {% for enzyme, start, end, color in record.features %}
+                        { start: {{ start }}, end: {{ end }}, color: "{{ color }}" },
+                        {% endfor %}
+                    ],
+                    enzymes: [
+                        {% for enzyme in record.enzyme_objects %}
+                        {
+                            name: "{{ enzyme.name }}",
+                            rseq: "{{ enzyme.rseq }}",
+                            fcut: {{ enzyme.fcut }},
+                            rcut: {{ enzyme.rcut }},
+                            color: "{{ enzyme.color }}"
+                        },
+                        {% endfor %}
+                    ],
+                    viewer: "both_flip"
+                }).render();
+            </script>
+            <hr>
+        </div>
+        {% endfor %}
+    </div>
+    <footer>
+        <center>
+            <img src="{{ url_for('static', filename='img/LFX-genofusionv.png') }}" alt="Logo" width="100px">
+            <p>2024 &copy; Linear Fox, Sequences Viewer (open source under Apache License)</p>
+        </center>
+    </footer>
+</body>
+</html>
