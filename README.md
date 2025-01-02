@@ -51,7 +51,7 @@ pip install tensorflow>=2.15.0
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## Support
-Contact: support@linearfox.com
+Contact: support@linearfox.com or ntfargo@proton.me
 
 ## License
 Apache License 2.0
