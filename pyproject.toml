@@ -1,12 +1,12 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "genofusion"
 description = "A tool for bioinformatics analysis of gene fusion events."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.13"
 license = { text = "Apache-2.0" }
 authors = [
     {name = "Nathan Fargo", email = "ntfargo@proton.me"},
@@ -42,19 +42,20 @@ classifiers = [
 ]
 
 dependencies = [
-    'pandas',
+    'pandas>=2.0.0',
     'regex',
-    'biopython',
+    'biopython>=1.81',
     'pygad',
-    'numpy',
-    'scipy',
-    'scikit-learn',
+    'numpy>=1.24.0',
+    'scipy>=1.10.0',
+    'scikit-learn>=1.3.0',
     'viennarna',
-    'tensorflow < 2.16.1 ; platform_system != "Darwin"',
-    'tensorflow-macos <= 2.16.1 ; platform_system == "Darwin"',
-    'protobuf <= 5.27.0',
+    'tensorflow>=2.15.0,<2.16.1 ; platform_system != "Darwin"',
+    'tensorflow-macos>=2.15.0,<=2.16.1 ; platform_system == "Darwin" and platform_machine == "arm64"',
+    'tensorflow-macos>=2.15.0,<=2.16.1 ; platform_system == "Darwin" and platform_machine == "x86_64"',
+    'protobuf<=5.27.0',
     'silence_tensorflow',
-    'flask',
+    'flask>=2.0.0',
 ]
 
 dynamic = ["version"]

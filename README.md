@@ -1,46 +1,57 @@
-<div align="center">
-  <img src="SequenceViewer/app/static/img/LFX-genofusionv.png" width="210"/>
+# Linear Fox | GenoFusion
 
-  # Linear Fox | GenoFusion
-
-  [![Python](https://img.shields.io/badge/Python-3.12%20%7C%203.11%20%7C%203.10-blue)](https://badge.fury.io/py/genet) 
-  [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-</div>
+[![Python](https://img.shields.io/badge/Python-3.12%20%7C%203.11%20%7C%203.10-blue)](https://badge.fury.io/py/genet) 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 GenoFusion | Enhance your fundamental molecular biology techniques to yield better outcomes.
 
-# Overview
-Welcome to Linear Fox GenoFusion, a python library and app designed to facilitate DNA/RNA sequence analysis & predict. This platform integrates a suite of bioinformatics tools that cater to researchers and scientists, helping you achieve better results in your molecular biology projects.
+## Overview
+Welcome to Linear Fox GenoFusion, a Python library and app designed to facilitate DNA/RNA sequence analysis & prediction. This platform integrates a suite of bioinformatics tools that cater to researchers and scientists, helping you achieve better results in your molecular biology projects.
 
-These functions are designed to facilitate complex data analysis, streamline computational workflows, and enhance research capabilities in the field of genetics.
+## Installation
 
-# Installation
-To get started with GenoFusion, follow these steps to clone the repository and set up your environment:
+### Prerequisites
+- Python 3.10-3.12 (3.13 not yet supported)
+- pip (latest version recommended)
+ 
 
-### Clone the repository
-
-- GitHub
+### Set up environment
 ```bash
 git clone https://github.com/Linear-Fox-Labs/GenoFusion.git
-```
-
-- Linear Fox
-```bash
-git clone https://git.linearfox.com/GenoFusion/.git/
-```
-
-### Set up and use a virtual environment:
-```bash
 cd GenoFusion
 
-python3 -m venv venv
-source venv/bin/activate
+# Create and activate virtual environment
+python3.12 -m venv venv
+source venv/bin/activate  # On Unix/macOS
+venv\Scripts\activate     # On Windows
+
+# Update pip
 pip install --upgrade pip
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Install package
 pip install -e .
+
+# Optional: Install TensorFlow (Platform specific)
+# For macOS with Apple Silicon:
+pip install tensorflow-macos>=2.15.0
+# For other platforms:
+pip install tensorflow>=2.15.0
 ```
 
-# Contributing
-We welcome contributions from the community. If you’d like to contribute, please fork the repository and submit a pull request with your changes. Make sure to follow our contribution guidelines.
+## Features
+- DNA/RNA sequence analysis
+- Sequence visualization
+- Built-in bioinformatics tools
+- Integration with common biological databases
 
-# Support
-If you encounter any issues or have questions, please contact our support team at support@linearfox.com.
+## Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Support
+Contact: support@linearfox.com
+
+## License
+Apache License 2.0
