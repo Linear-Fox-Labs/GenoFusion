@@ -28,9 +28,9 @@ venv.bak/
 .venv/
 
 # Ignore specific file types in sequenceviewer/upload
-SequenceViewer/uploads/*.fasta
-SequenceViewer/uploads/*.fastq
-SequenceViewer/uploads/*.gb
+SequenceViewer/app/uploads/*.fasta
+SequenceViewer/app/uploads/*.fastq
+SequenceViewer/app/uploads/*.gb
 
 # mac
 .DS_Store

@@ -1,4 +1,4 @@
-from flask import request, render_template, redirect, url_for
+from flask import request, render_template, redirect, url_for, flash
 from Bio import SeqIO
 from GenoFusion.Utils import get_sequence_properties
 import os
@@ -12,68 +12,76 @@ def index():
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
-        return redirect(request.url)
+        return redirect(url_for('index'))
+    
     file = request.files['file']
     if file.filename == '':
-        return redirect(request.url)
+        return redirect(url_for('index'))
+        
     if file:
+        # Create uploads directory if it doesn't exist
+        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+            os.makedirs(app.config['UPLOAD_FOLDER'])
+            
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(filepath)
         return redirect(url_for('view_file', filename=file.filename))
-    return redirect(request.url)
+    
+    return redirect(url_for('index'))
 
 @app.route('/view/<filename>')
 def view_file(filename):
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    
+    if not os.path.exists(filepath):
+        return redirect(url_for('index'))
+        
     file_type = filename.split('.')[-1].lower()
-    sequences = []
+    if file_type not in ['fasta', 'fa', 'fastq', 'gb', 'genbank']:
+        return redirect(url_for('index'))
 
-    with open(filepath, "r") as handle:
-        for record in SeqIO.parse(handle, file_type):
-            sequence_str = str(record.seq)
-            highlighted_sequence, enzyme_sites = find_enzyme_sites(sequence_str, selected_group='All Commercial')
-            sequence_properties = get_sequence_properties(sequence_str)
-            amino_acid_sequence = translate_sequence(sequence_str)
-            sequences.append({
-                "id": record.id,
-                "sequence": sequence_str,
-                "highlighted_sequence": highlighted_sequence,
-                "amino_acid_sequence": amino_acid_sequence,
-                "features": enzyme_sites,
-                "properties": sequence_properties
-            })
+    try:
+        sequences = []
+        with open(filepath, "r") as handle:
+            for record in SeqIO.parse(handle, file_type):
+                sequence_str = str(record.seq)
+                highlighted_sequence, enzyme_sites = find_enzyme_sites(sequence_str, 'All Commercial')
+                
+                sequence_data = {
+                    "id": record.id,
+                    "sequence": sequence_str,
+                    "highlighted_sequence": highlighted_sequence,
+                    "amino_acid_sequence": translate_sequence(sequence_str),
+                    "features": [],
+                    "enzyme_objects": []
+                }
 
-    selected_enzyme_type = request.args.get('enzyme_type', '6+ Cutters')
-    filtered_sequences = []
+                # Process enzyme sites
+                for enzyme, start, end in enzyme_sites:
+                    color = get_color_for_enzyme(enzyme.__name__)
+                    sequence_data["features"].append((enzyme.__name__, start, end, color))
+                    sequence_data["enzyme_objects"].append({
+                        "name": enzyme.__name__,
+                        "rseq": str(enzyme.site),
+                        "fcut": 0,
+                        "rcut": len(enzyme.site),
+                        "color": color
+                    })
+                
+                sequences.append(sequence_data)
 
-    for sequence in sequences:
-        filtered_features = []
-        enzyme_objects = []
-        for enzyme_info in sequence['features']:
-            enzyme = enzyme_info[0]
-            start = enzyme_info[1]
-            end = enzyme_info[2]
-            color = get_color_for_enzyme(enzyme.__name__)
-            if selected_enzyme_type == 'Fermentas' or selected_enzyme_type in enzyme_groups or selected_enzyme_type in enzyme.__class__.__name__:
-                filtered_features.append((enzyme, start, end, color))
-                enzyme_objects.append({
-                    "name": enzyme.__name__,
-                    "rseq": enzyme.site,
-                    "fcut": 0,
-                    "rcut": len(enzyme.site),
-                    "color": color
-                })
-        sequence['features'] = filtered_features
-        sequence['enzyme_objects'] = enzyme_objects
-        filtered_sequences.append(sequence)
-
-    sequences_data = [{
-        'id': sequence['id'],
-        'description': '',
-        'sequence': sequence.get('sequence', ''),
-        'amino_acid_sequence': sequence['amino_acid_sequence'],
-        'features': sequence['features'],
-        'enzyme_objects': sequence['enzyme_objects']
-    } for sequence in filtered_sequences]
-
-    return render_template('view.html', sequences=sequences_data, filename=filename)
+        if not sequences:
+            return render_template('view.html', 
+                                sequences=[], 
+                                filename=filename,
+                                error="No sequences found in file")
+                                
+        return render_template('view.html', 
+                             sequences=sequences,
+                             filename=filename)
+                             
+    except Exception as e:
+        return render_template('view.html', 
+                             sequences=[],
+                             filename=filename,
+                             error=f"Error processing file: {str(e)}")
