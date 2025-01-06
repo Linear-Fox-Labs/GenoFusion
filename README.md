@@ -8,6 +8,8 @@ GenoFusion | Enhance your fundamental molecular biology techniques to yield bett
 ## Overview
 Welcome to Linear Fox GenoFusion, a Python library and app designed to facilitate DNA/RNA sequence analysis & prediction. This platform integrates a suite of bioinformatics tools that cater to researchers and scientists, helping you achieve better results in your molecular biology projects.
 
+For detailed documentation, please refer to the [docs](docs.md).
+ 
 ## Installation
 
 ### Prerequisites
