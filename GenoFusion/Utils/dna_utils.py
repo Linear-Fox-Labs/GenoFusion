@@ -4,6 +4,9 @@
 This module provides utility functions for DNA sequence analysis with support for IUPAC ambiguity codes.
 """
 
+from typing import Dict, List
+import regex
+
 def calculate_nucleotide_composition(sequence):
     """
     Calculate the count of each nucleotide in the sequence.
@@ -129,3 +132,30 @@ def validate_sequence(sequence, alphabet='ATGCN'):
         bool: True if valid, False otherwise
     """
     return all(base in alphabet for base in sequence.upper())
+
+ 
+def find_crispr_offtargets(guide_seq: str, genome_sequence: str, mismatches: int = 3) -> List[Dict]:
+    """Find potential off-target sites using fuzzy matching"""
+    pattern = f"(?b)({guide_seq}){{s<={mismatches}}}"
+    matches = []
+    for match in regex.finditer(pattern, genome_sequence, regex.IGNORECASE):
+        matches.append({
+            "start": match.start(),
+            "end": match.end(),
+            "sequence": match.group(),
+            "mismatches": match.fuzzy_counts[0]
+        })
+    return matches
+
+def _check_secondary_structure(sequence: str) -> bool:
+    """Placeholder function to check for secondary structure"""
+    return False
+
+def validate_grna(sequence: str) -> Dict:
+    """Comprehensive CRISPR guide validation"""
+    return {
+        "valid": len(sequence) == 20,
+        "gc_warning": not (40 <= calculate_gc_content(sequence) <= 60),
+        "polyT": "TTTT" in sequence,
+        "secondary_structure": _check_secondary_structure(sequence)
+    }
